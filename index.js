@@ -80,7 +80,7 @@ app.get( "/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     httpOnly:false,
                     sameSite:"none",
-                    secure:true
+                    secure:false
                 }).status(200)
                 res.redirect(`${process.env.FRONTEND_URL}`) 
             } catch (error) {
@@ -104,7 +104,7 @@ app.get( "/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     httpOnly:false,
                     sameSite:"none",
-                    secure:true
+                    secure:false
                 }).status(200)
                 res.redirect(`${process.env.FRONTEND_URL}`) 
              }
@@ -200,7 +200,7 @@ app.post('/user-login',(req,res)=>{
                     res.cookie("accesstoken",token,{
                         httpOnly:false,
                         sameSite:"none",
-                        secure:true
+                        secure:false
                     }).status(200).json({message:'logged in successfully'})
                 }
             })
