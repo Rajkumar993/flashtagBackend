@@ -154,11 +154,12 @@ app.post("/addpost",upload.single('image'),(req,res)=>{
 app.use(cookieParser());
 app.use(express.json());
 const db=mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"rksocialmedia",
-     charset: 'utf8mb4'
+    host:process.env.MYSQL_HOST,
+    user:process.env.MYSQL_USER,
+    password:process.env.MYSQL_PASSWORD,
+    database:process.env.MYSQL_DB,
+     charset: 'utf8mb4',
+     port:process.env.MYSQL_PORT
 })
 
 app.post('/user-register',(req,res)=>{
