@@ -75,15 +75,17 @@ app.get("/auth/google/callback",
         if(err) res.status(500).json(err);
          if(data.length>0){
             try {
+                console.log("vanakam da mapla")
                 const re=await queryAsync(`update auth set online=? where email=?`,["true",data[0].email])
+                console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                     sameSite:"none",
                     secure:process.env.NODE_ENV==="production"
-                }).status(200).redirect(process.env.FRONTEND_URL)
+                }).status(200).redirect('http://localhost:5173')
                
             } catch (error) {
-               
+               res.status(500).json(error)
             }
            
          }else{
@@ -103,7 +105,7 @@ app.get("/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     sameSite:"none",
                    secure:process.env.NODE_ENV==="production"
-                }).status(200).redirect(process.env.FRONTEND_URL)
+                }).status(200).redirect('http://localhost:5173')
              
              }
                  catch (err) {
