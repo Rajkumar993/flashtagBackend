@@ -60,11 +60,11 @@ function queryAsync(query, values) {
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 app.get("/auth/google", passport.authenticate("google", { scope: ["email", "profile"] }));
-// app.get('/login',(req,res)=>{
-//     res.json("unathorized usage")
-// })
-app.get( "/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/" }),
+app.get('/login',(req,res)=>{
+    res.json("unathorized usage")
+})
+app.get("/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/login" }),
     (req, res) => {
         const { id, displayName, emails, photos } = req.user;
         console.log("User data:", req.user); 
