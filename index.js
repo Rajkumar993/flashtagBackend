@@ -79,7 +79,7 @@ app.get( "/auth/google/callback",
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                     sameSite:"none",
-                    secure:false
+                    secure:process.env.NODE_ENV==="production"
                 }).status(200)
                 res.redirect(`${process.env.FRONTEND_URL}`) 
             } catch (error) {
@@ -102,7 +102,7 @@ app.get( "/auth/google/callback",
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                     sameSite:"none",
-                    secure:false
+                   secure:process.env.NODE_ENV==="production"
                 }).status(200)
                 res.redirect(`${process.env.FRONTEND_URL}`) 
              }
@@ -197,7 +197,7 @@ app.post('/user-login',(req,res)=>{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     res.cookie("accesstoken",token,{
                         sameSite:"none",
-                        secure:false
+                       secure:process.env.NODE_ENV==="production"
                     }).status(200).json({message:'logged in successfully'})
                 }
             })
