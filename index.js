@@ -60,11 +60,11 @@ function queryAsync(query, values) {
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 app.get("/auth/google", passport.authenticate("google", { scope: ["email", "profile"] }));
-app.get('/login',(req,res)=>{
-    res.json("unathorized usage")
-})
+// app.get('/login',(req,res)=>{
+//     res.json("unathorized usage")
+// })
 app.get( "/auth/google/callback",
-    passport.authenticate("google", { failureRedirect: "/login" }),
+    passport.authenticate("google", { failureRedirect: "/" }),
     (req, res) => {
         const { id, displayName, emails, photos } = req.user;
         console.log("User data:", req.user); 
@@ -80,10 +80,10 @@ app.get( "/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     sameSite:"none",
                     secure:process.env.NODE_ENV==="production"
-                }).status(200)
-                res.redirect(`${process.env.FRONTEND_URL}`) 
+                }).status(200).redirect(process.env.FRONTEND_URL)
+               
             } catch (error) {
-                console.log
+               
             }
            
          }else{
@@ -103,8 +103,8 @@ app.get( "/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     sameSite:"none",
                    secure:process.env.NODE_ENV==="production"
-                }).status(200)
-                res.redirect(`${process.env.FRONTEND_URL}`) 
+                }).status(200).redirect(process.env.FRONTEND_URL)
+             
              }
                  catch (err) {
                     console.log(err)
