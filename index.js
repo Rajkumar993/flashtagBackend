@@ -39,7 +39,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `http://localhost:${process.env.PORT}/auth/google/callback`,
+            callbackURL: `https://flashtagbackend.onrender.com/auth/google/callback`,
             scope: ["profile", "email"],
           },
           (accessToken, refreshToken, profile, done) => {
@@ -78,7 +78,6 @@ app.get( "/auth/google/callback",
                 const re=await queryAsync(`update auth set online=? where email=?`,["true",data[0].email])
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
-                    httpOnly:false,
                     sameSite:"none",
                     secure:false
                 }).status(200)
@@ -102,7 +101,6 @@ app.get( "/auth/google/callback",
                 // Now retrieve the user data immediately after the insert
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
-                    httpOnly:false,
                     sameSite:"none",
                     secure:false
                 }).status(200)
@@ -198,7 +196,6 @@ app.post('/user-login',(req,res)=>{
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     res.cookie("accesstoken",token,{
-                        httpOnly:false,
                         sameSite:"none",
                         secure:false
                     }).status(200).json({message:'logged in successfully'})
