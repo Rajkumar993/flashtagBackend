@@ -79,7 +79,7 @@ app.get("/auth/google/callback",
                 const re=await queryAsync(`update auth set online=? where email=?`,["true",data[0].email])
                 console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.cookie("accesstoken",token,{
+                res.cookie("ulaum",token,{
                       sameSite:"none",
                       secure:true,
                     path:"/"
@@ -103,7 +103,7 @@ app.get("/auth/google/callback",
                 console.log(updateonline,"updated")
                 // Now retrieve the user data immediately after the insert
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.cookie("accesstoken",token,{
+                res.cookie("ulaum",token,{
                     sameSite:"none",
                    secure:true,
                    path:'/'
@@ -132,7 +132,7 @@ const verifyJWT=(req,res,next)=>{
         next();
     } catch (err) {
         res.status(400).json('Invalid token');
-        res.clearCookie('accesstoken');
+        res.clearCookie('ulaum');
     }
 
 }
@@ -199,7 +199,7 @@ app.post('/user-login',(req,res)=>{
                 if(err) res.json(err);
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                    res.cookie("accesstoken",token,{
+                    res.cookie("ulaum",token,{
                         sameSite:"none",
                        secure:true,
                        path:"/"
@@ -221,7 +221,7 @@ app.post('/logout/:id',(req,res)=>{
     db.query(q,["false",req.params.id],(err,data)=>{
         if(err) res.status(500).json(err);
         else{
-           res.clearCookie("accesstoken",{
+           res.clearCookie("ulaum",{
             sameSite:"none",
             secure:true,
             path:"/"
