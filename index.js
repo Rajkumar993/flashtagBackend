@@ -80,7 +80,6 @@ app.get("/auth/google/callback",
                 console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
-                    httpOnly:true,
                       sameSite:"none",
                     secure:false,
                     path:"/"
@@ -105,7 +104,6 @@ app.get("/auth/google/callback",
                 // Now retrieve the user data immediately after the insert
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
-                    httpOnly:true,
                     sameSite:"none",
                    secure:false,
                    path:'/'
@@ -202,7 +200,6 @@ app.post('/user-login',(req,res)=>{
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     res.cookie("accesstoken",token,{
-                        httpOnly:true,
                         sameSite: "none",
                        secure:false,
                        path:"/"
