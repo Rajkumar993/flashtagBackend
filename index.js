@@ -81,7 +81,7 @@ app.get("/auth/google/callback",
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                     httpOnly:true,
-                      SameSite:"None",
+                      sameSite:"none",
                     secure:false,
                     path:"/"
                 }).status(200).redirect('http://localhost:5173')
@@ -106,7 +106,7 @@ app.get("/auth/google/callback",
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                     httpOnly:true,
-                    SameSite:"None",
+                    sameSite:"none",
                    secure:false,
                    path:'/'
                 }).status(200).redirect('http://localhost:5173')
@@ -203,7 +203,7 @@ app.post('/user-login',(req,res)=>{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     res.cookie("accesstoken",token,{
                         httpOnly:true,
-                        SameSite: "None",
+                        sameSite: "none",
                        secure:false,
                        path:"/"
                     }).status(200).json({message:'logged in successfully'})
@@ -225,7 +225,7 @@ app.post('/logout/:id',(req,res)=>{
         if(err) res.status(500).json(err);
         else{
            res.clearCookie("accesstoken",{
-            SameSite:"None",
+            sameSite:"none",
             secure:false,
             path:"/"
            }).status(200).json({message:'logged out successfully'}) 
