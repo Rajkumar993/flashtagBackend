@@ -82,7 +82,7 @@ app.get("/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     httpOnly:true,
                     sameSite:"none",
-                    secure:process.env.NODE_ENV==="production",
+                    secure:false,
                     path:"/"
                 }).status(200).redirect('http://localhost:5173')
                
@@ -107,7 +107,7 @@ app.get("/auth/google/callback",
                 res.cookie("accesstoken",token,{
                     httpOnly:true,
                     sameSite:"none",
-                   secure:process.env.NODE_ENV==="production",
+                   secure:false,
                    path:'/'
                 }).status(200).redirect('http://localhost:5173')
              
@@ -204,7 +204,7 @@ app.post('/user-login',(req,res)=>{
                     res.cookie("accesstoken",token,{
                         httpOnly:true,
                         sameSite:"none",
-                       secure:process.env.NODE_ENV==="production",
+                       secure:false,
                        path:"/"
                     }).status(200).json({message:'logged in successfully'})
                 }
@@ -226,7 +226,7 @@ app.post('/logout/:id',(req,res)=>{
         else{
            res.clearCookie("accesstoken",{
             sameSite:true,
-            secure:true,
+            secure:false,
             path:"/"
            }).status(200).json({message:'logged out successfully'}) 
         }
