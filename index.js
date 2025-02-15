@@ -26,7 +26,7 @@ const app= express();
     origin:"http://localhost:5173",
     credentials: true
   }));
-app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
+// app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
