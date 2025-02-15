@@ -21,6 +21,10 @@ const app= express();
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //     credentials:true
 // }));
+const allowedOrigins = [
+    "https://flashtag.netlify.app",
+    "http://localhost:5173"
+  ];
   
   app.use(cors({
     origin:"http://localhost:5173",
@@ -75,8 +79,8 @@ app.get("/auth/google/callback",
                 console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
-                      sameSite:"none",
-                      secure:false,
+                      sameSite:"lax",
+                      secure:true,
                     path:"/"
                 }).status(200).redirect('http://localhost:5173')
                
@@ -98,8 +102,8 @@ app.get("/auth/google/callback",
                 console.log(updateonline,"updated")
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
-                    sameSite:"none",
-                   secure:false,
+                    sameSite:"lax",
+                   secure:true,
                    path:'/'
                 }).status(200).redirect('http://localhost:5173')
              
@@ -193,8 +197,8 @@ app.post('/user-login',(req,res)=>{
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     res.cookie("accesstoken",token,{
-                        sameSite:"none",
-                       secure:false,
+                        sameSite:"lax",
+                       secure:true,
                        path:"/"
                     }).status(200).json({message:'logged in successfully',data:token})
                 }
@@ -215,8 +219,8 @@ app.post('/logout/:id',(req,res)=>{
         if(err) res.status(500).json(err);
         else{
            res.clearCookie("accesstoken",{
-            sameSite:"none",
-            secure:false,
+            sameSite:"lax",
+            secure:true,
             path:"/"
            }).status(200).json({message:'logged out successfully'}) 
         }
@@ -241,7 +245,7 @@ app.post('/logout/:id',(req,res)=>{
         else res.json(data)
        })
     })
-
+    
 app.get('/gethome/:userId',verifyJWT,(req,res)=>{
     // res.json(req.auth.name);
      console.log(req.cookies)
