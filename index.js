@@ -21,14 +21,9 @@ const app= express();
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //     credentials:true
 // }));
-const allowedOrigins = [
-    "https://flashtag.netlify.app",
-    "http://localhost:5173"
-  ];
   
   app.use(cors({
     origin:"http://localhost:5173",
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }));
 app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
