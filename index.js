@@ -199,7 +199,7 @@ app.post('/user-login',(req,res)=>{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     req.session.token = token;
                     res.cookie("accesstoken",token,{
-                        sameSite:"lax",
+                        sameSite:"none",
                        secure:false,
                        path:"/"
                     }).status(200).json({message:'logged in successfully',data:token})
