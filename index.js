@@ -79,11 +79,7 @@ app.get("/auth/google/callback",
                 const re=await queryAsync(`update auth set online=? where email=?`,["true",data[0].email])
                 console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.cookie("accesstoken",token,{
-                      sameSite:"lax",
-                      secure:false,
-                    path:"/"
-                }).status(200).redirect('http://localhost:5173')
+                res.json({data:token}).status(200).redirect('http://localhost:5173')
                
             } catch (error) {
                res.status(500).json(error)
@@ -102,11 +98,7 @@ app.get("/auth/google/callback",
                 const updateonline=await queryAsync(`update auth set online=? where id=?`,["true",data3[0].id]);
                 console.log(updateonline,"updated")
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.cookie("accesstoken",token,{
-                    sameSite:"lax",
-                   secure:false,
-                   path:'/'
-                }).status(200).redirect('http://localhost:5173')
+                res.json({data:token}).status(200).redirect('http://localhost:5173')
              
              }
                  catch (err) {
