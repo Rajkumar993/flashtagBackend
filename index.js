@@ -75,12 +75,11 @@ app.get("/auth/google/callback",
         if(err) res.status(500).json(err);
          if(data.length>0){
             try {
-                console.log("vanakam da mapla")
                 const re=await queryAsync(`update auth set online=? where email=?`,["true",data[0].email])
                 console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.cookie("ulaum",token,{
-                      sameSite:"none",
+                res.cookie("accesstoken",token,{
+                      sameSite:"strict",
                       secure:true,
                     path:"/"
                 }).status(200).redirect('http://localhost:5173')
@@ -101,10 +100,9 @@ app.get("/auth/google/callback",
                 console.log(data3,"data3")
                 const updateonline=await queryAsync(`update auth set online=? where id=?`,["true",data3[0].id]);
                 console.log(updateonline,"updated")
-                // Now retrieve the user data immediately after the insert
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.cookie("ulaum",token,{
-                    sameSite:"none",
+                res.cookie("accesstoken",token,{
+                    sameSite:"strict",
                    secure:true,
                    path:'/'
                 }).status(200).redirect('http://localhost:5173')
@@ -132,7 +130,7 @@ const verifyJWT=(req,res,next)=>{
         next();
     } catch (err) {
         res.status(400).json('Invalid token');
-        res.clearCookie('ulaum');
+        res.clearCookie('accesstoken');
     }
 
 }
@@ -184,7 +182,6 @@ app.post('/user-register',(req,res)=>{
 })
 
 app.post('/user-login',(req,res)=>{
-    console.log("hi",req.body.email)
   const q=`select * from auth where email = ?`
     console.log(req.body.email,req.body.password)
    db.query(q,[req.body.email],async(err,data)=>{
@@ -199,11 +196,11 @@ app.post('/user-login',(req,res)=>{
                 if(err) res.json(err);
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                    res.cookie("ulaum",token,{
-                        sameSite:"none",
+                    res.cookie("accesstoken",token,{
+                        sameSite:"strict",
                        secure:true,
                        path:"/"
-                    }).status(200).json({message:'logged in successfully'})
+                    }).status(200).json({message:'logged in successfully',data:token})
                 }
             })
            
@@ -221,8 +218,8 @@ app.post('/logout/:id',(req,res)=>{
     db.query(q,["false",req.params.id],(err,data)=>{
         if(err) res.status(500).json(err);
         else{
-           res.clearCookie("ulaum",{
-            sameSite:"none",
+           res.clearCookie("accesstoken",{
+            sameSite:"strict",
             secure:true,
             path:"/"
            }).status(200).json({message:'logged out successfully'}) 
