@@ -241,9 +241,7 @@ app.post('/logout/:id',(req,res)=>{
         else res.json(data)
        })
     })
-    app.get("/",(req,res)=>{
-        console.log(req.cookies,"cookies")
-    })
+
 app.get('/gethome/:userId',verifyJWT,(req,res)=>{
     // res.json(req.auth.name);
      console.log(req.cookies)
