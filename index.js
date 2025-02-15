@@ -27,6 +27,12 @@ const app= express();
     credentials: true
   }));
 // app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
+app.use(session({
+    secret: process.env.SECRECT_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, sameSite: "none" } // ✅ Required for cross-origin
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
