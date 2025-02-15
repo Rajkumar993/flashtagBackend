@@ -24,15 +24,10 @@ const app= express();
   
   app.use(cors({
     origin:"http://localhost:5173",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }));
-// app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
-app.use(session({
-    secret: process.env.SECRECT_KEY,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, sameSite: "none" } // ✅ Required for cross-origin
-}));
+app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
@@ -79,7 +74,11 @@ app.get("/auth/google/callback",
                 const re=await queryAsync(`update auth set online=? where email=?`,["true",data[0].email])
                 console.log("thenila irunthu")
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.json({data:token}).status(200).redirect('http://localhost:5173')
+                res.cookie("accesstoken",token,{
+                      sameSite:"lax",
+                      secure:false,
+                    path:"/"
+                }).status(200).redirect('http://localhost:5173')
                
             } catch (error) {
                res.status(500).json(error)
@@ -98,7 +97,11 @@ app.get("/auth/google/callback",
                 const updateonline=await queryAsync(`update auth set online=? where id=?`,["true",data3[0].id]);
                 console.log(updateonline,"updated")
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                res.json({data:token}).status(200).redirect('http://localhost:5173')
+                res.cookie("accesstoken",token,{
+                    sameSite:"lax",
+                   secure:false,
+                   path:'/'
+                }).status(200).redirect('http://localhost:5173')
              
              }
                  catch (err) {
@@ -189,9 +192,8 @@ app.post('/user-login',(req,res)=>{
                 if(err) res.json(err);
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
-                    req.session.token = token;
                     res.cookie("accesstoken",token,{
-                        sameSite:"none",
+                        sameSite:"lax",
                        secure:false,
                        path:"/"
                     }).status(200).json({message:'logged in successfully',data:token})
@@ -239,8 +241,10 @@ app.post('/logout/:id',(req,res)=>{
         else res.json(data)
        })
     })
-
-app.get('/gethome/:userId',(req,res)=>{
+    app.get("/",(req,res)=>{
+        console.log(req.cookies,"cookies")
+    })
+app.get('/gethome/:userId',verifyJWT,(req,res)=>{
     // res.json(req.auth.name);
      console.log(req.cookies)
    const userid=req.params.userId
@@ -318,7 +322,7 @@ app.post('/add-like/:userId/:postId',(req,res)=>{
         else res.json(data)
     })
 })
-app.get('/userProfile/:userId',(req,res)=>{
+app.get('/userProfile/:userId',verifyJWT,(req,res)=>{
     const q=`SELECT a.username,a.profiePic,a.coverPic from auth a where a.id=?`
      db.query(q,[req.params.userId],(err,data)=>{
         if(err) res.status(500).json(err);
@@ -332,7 +336,7 @@ app.get('/userProfile/:userId',(req,res)=>{
          }
      })
 })
-app.put('/update/user/:userId',upload.fields([{ name: 'profilePic' }, { name: 'coverPic' }]),(req,res)=>{
+app.put('/update/user/:userId',upload.fields([{ name: 'profilePic' }, { name: 'coverPic' }]),verifyJWT,(req,res)=>{
     
     const q =`select a.profiePic,a.coverPic from auth a where a.id=?`
     db.query(q,[req.params.userId],(err,data)=>{
@@ -383,7 +387,7 @@ app.delete('/unfollow/:followerId/:followedId',(req,res)=>{
         else res.json(data)
     })
 })
-app.delete('/deletPost/:postId',(req,res)=>{
+app.delete('/deletPost/:postId',verifyJWT,(req,res)=>{
     const q=`delete from post where userId=? and id=?`;
     db.query(q,[req.auth.id,req.params.postId],(err,data)=>{
         if(err) res.status(500).json(err);
