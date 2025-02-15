@@ -248,7 +248,7 @@ app.post('/logout/:id',(req,res)=>{
        })
     })
 
-app.get('/gethome/:userId',verifyJWT,(req,res)=>{
+app.get('/gethome/:userId',(req,res)=>{
     // res.json(req.auth.name);
      console.log(req.cookies)
    const userid=req.params.userId
@@ -326,7 +326,7 @@ app.post('/add-like/:userId/:postId',(req,res)=>{
         else res.json(data)
     })
 })
-app.get('/userProfile/:userId',verifyJWT,(req,res)=>{
+app.get('/userProfile/:userId',(req,res)=>{
     const q=`SELECT a.username,a.profiePic,a.coverPic from auth a where a.id=?`
      db.query(q,[req.params.userId],(err,data)=>{
         if(err) res.status(500).json(err);
@@ -340,7 +340,7 @@ app.get('/userProfile/:userId',verifyJWT,(req,res)=>{
          }
      })
 })
-app.put('/update/user/:userId',upload.fields([{ name: 'profilePic' }, { name: 'coverPic' }]),verifyJWT,(req,res)=>{
+app.put('/update/user/:userId',upload.fields([{ name: 'profilePic' }, { name: 'coverPic' }]),(req,res)=>{
     
     const q =`select a.profiePic,a.coverPic from auth a where a.id=?`
     db.query(q,[req.params.userId],(err,data)=>{
@@ -391,7 +391,7 @@ app.delete('/unfollow/:followerId/:followedId',(req,res)=>{
         else res.json(data)
     })
 })
-app.delete('/deletPost/:postId',verifyJWT,(req,res)=>{
+app.delete('/deletPost/:postId',(req,res)=>{
     const q=`delete from post where userId=? and id=?`;
     db.query(q,[req.auth.id,req.params.postId],(err,data)=>{
         if(err) res.status(500).json(err);
