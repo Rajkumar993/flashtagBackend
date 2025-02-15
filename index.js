@@ -13,7 +13,7 @@ const passport = require('passport');
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 // const allowedOrigins=[
 //     "https://flashtag.netlify.app",
-//       "http://localhost:5173"
+//       "https://flashtagsocial.netlify.app"
 // ]
 const app= express();
 // app.use(cors({
@@ -23,11 +23,11 @@ const app= express();
 // }));
 const allowedOrigins = [
     "https://flashtag.netlify.app",
-    "http://localhost:5173"
+    "https://flashtagsocial.netlify.app"
   ];
   
   app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"https://flashtagsocial.netlify.app",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }));
@@ -82,7 +82,7 @@ app.get("/auth/google/callback",
                       sameSite:"lax",
                       secure:true,
                     path:"/"
-                }).status(200).redirect('http://localhost:5173')
+                }).status(200).redirect('https://flashtagsocial.netlify.app')
                
             } catch (error) {
                res.status(500).json(error)
@@ -105,7 +105,7 @@ app.get("/auth/google/callback",
                     sameSite:"lax",
                    secure:true,
                    path:'/'
-                }).status(200).redirect('http://localhost:5173')
+                }).status(200).redirect('https://flashtagsocial.netlify.app')
              
              }
                  catch (err) {
