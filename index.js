@@ -31,7 +31,7 @@ const allowedOrigins = [
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }));
-app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SECRECT_KEY, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
