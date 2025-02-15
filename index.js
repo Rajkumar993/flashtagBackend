@@ -80,7 +80,7 @@ app.get("/auth/google/callback",
                 const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                       sameSite:"lax",
-                      secure:true,
+                      secure:false,
                     path:"/"
                 }).status(200).redirect('http://localhost:5173')
                
@@ -103,7 +103,7 @@ app.get("/auth/google/callback",
                 const token =jwt.sign({id:data3[0].id,name:data3[0].username,profile:data3[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                 res.cookie("accesstoken",token,{
                     sameSite:"lax",
-                   secure:true,
+                   secure:false,
                    path:'/'
                 }).status(200).redirect('http://localhost:5173')
              
@@ -198,7 +198,7 @@ app.post('/user-login',(req,res)=>{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
                     res.cookie("accesstoken",token,{
                         sameSite:"lax",
-                       secure:true,
+                       secure:false,
                        path:"/"
                     }).status(200).json({message:'logged in successfully',data:token})
                 }
@@ -220,7 +220,7 @@ app.post('/logout/:id',(req,res)=>{
         else{
            res.clearCookie("accesstoken",{
             sameSite:"lax",
-            secure:true,
+            secure:false,
             path:"/"
            }).status(200).json({message:'logged out successfully'}) 
         }
@@ -245,7 +245,9 @@ app.post('/logout/:id',(req,res)=>{
         else res.json(data)
        })
     })
-    
+    app.get("/",(req,res)=>{
+        console.log(req.cookies,"cookies")
+    })
 app.get('/gethome/:userId',verifyJWT,(req,res)=>{
     // res.json(req.auth.name);
      console.log(req.cookies)
