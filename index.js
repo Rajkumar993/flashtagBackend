@@ -197,6 +197,7 @@ app.post('/user-login',(req,res)=>{
                 if(err) res.json(err);
                 else{
                     const token =jwt.sign({id:data[0].id,name:data[0].username,profile:data[0].profiePic},process.env.SECRECT_KEY,{expiresIn:"4h"})
+                    req.session.token = token;
                     res.cookie("accesstoken",token,{
                         sameSite:"lax",
                        secure:false,
